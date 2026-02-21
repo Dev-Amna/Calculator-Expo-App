@@ -31,7 +31,7 @@ export default function Index() {
 
       <View style={styles.btnContainer}>
         {buttons.map((btn, idx) => {
-          return <TouchableOpacity key={idx} style={styles.btn} onPress={onPress}>
+          return <TouchableOpacity key={idx} style={styles.btn} onPress={() => onPress((btn))}>
             <Text style={styles.btnText}>{btn}</Text>
           </TouchableOpacity>
         })}
