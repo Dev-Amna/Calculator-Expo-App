@@ -13,6 +13,7 @@ export default function Index() {
   ]
   const handleClear = () => {
     setInput("");
+    setAnswer();
   }
 
 
@@ -20,32 +21,15 @@ export default function Index() {
     try {
       if (!input) return;
 
-      let opr = "";
-
-      if (input.includes("+")) opr = "+";
-      else if (input.includes("-")) opr = "-";
-      else if (input.includes("*")) opr = "*";
-      else if (input.includes("/")) opr = "/";
-
-      if (!opr) return;
-
-      const parts = input.split(opr);
-      const num1 = parseFloat(parts[0]);
-      const num2 = parseFloat(parts[1]);
-
-      let result = 0;
-
-      if (opr === "+") result = num1 + num2;
-      if (opr === "-") result = num1 - num2;
-      if (opr === "*") result = num1 * num2;
-      if (opr === "/") result = num1 / num2;
-
+      const result = Function(`return ${input}`)();
       setAnswer(result);
       setInput("");
     } catch (error) {
-      console.log("Calculation Error");
+      setInput("Calculation Error");
     }
   };
+
+
   const onPress = (value: any) => {
     if (value === "C") {
       handleClear();
@@ -58,20 +42,24 @@ export default function Index() {
   }
   return (
     <View style={styles.container}>
-      {answer ? <Text style={styles.displayText}>ans : {answer} </Text> : null}
-      {/* Display Result  */}
-      <View style={styles.display}>
-        {/* <Text style={styles.displayText}>{answer}</Text> */}
-        <Text style={styles.displayText}>{input || 0}</Text>
-      </View>
+      <Text style={styles.heading}>Calculator App</Text>
+
+      <View>
+        {answer !== undefined && <Text style={styles.displayText}>ans : {answer} </Text> : null}
+        {/* Display Result  */}
+        <View style={styles.display}>
+          {/* <Text style={styles.displayText}>{answer}</Text> */}
+          <Text style={styles.displayText}>{input || 0}</Text>
+        </View>
 
 
-      <View style={styles.btnContainer}>
-        {buttons.map((btn, idx) => {
-          return <TouchableOpacity key={idx} style={styles.btn} onPress={() => onPress((btn))}>
-            <Text style={styles.btnText}>{btn}</Text>
-          </TouchableOpacity>
-        })}
+        <View style={styles.btnContainer}>
+          {buttons.map((btn, idx) => {
+            return <TouchableOpacity key={idx} style={styles.btn} onPress={() => onPress((btn))}>
+              <Text style={styles.btnText}>{btn}</Text>
+            </TouchableOpacity>
+          })}
+        </View>
       </View>
 
     </View>
@@ -83,10 +71,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#000",
-    justifyContent: "flex-end",
+    justifyContent: "space-between",
+    alignItems: "center",
+
     padding: 20,
   },
-
+  heading: {
+    fontSize: 40,
+    color: "white",
+    marginTop: 83
+  },
   display: {
     marginBottom: 20,
     alignItems: "flex-end",
