@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { StyleSheet, Text, Touchable, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function Index() {
   const [input, setInput] = useState("");
+  const [answer, setAnswer] = useState();
 
   const buttons = [
     "7", "8", "9", "/",
@@ -11,21 +12,57 @@ export default function Index() {
     "0", "C", "=", "+"
   ]
   const handleClear = () => {
-    setInput("0");
+    setInput("");
   }
 
+
+  const handleEqual = () => {
+    try {
+      if (!input) return;
+
+      let opr = "";
+
+      if (input.includes("+")) opr = "+";
+      else if (input.includes("-")) opr = "-";
+      else if (input.includes("*")) opr = "*";
+      else if (input.includes("/")) opr = "/";
+
+      if (!opr) return;
+
+      const parts = input.split(opr);
+      const num1 = parseFloat(parts[0]);
+      const num2 = parseFloat(parts[1]);
+
+      let result = 0;
+
+      if (opr === "+") result = num1 + num2;
+      if (opr === "-") result = num1 - num2;
+      if (opr === "*") result = num1 * num2;
+      if (opr === "/") result = num1 / num2;
+
+      setAnswer(result);
+      setInput("");
+    } catch (error) {
+      console.log("Calculation Error");
+    }
+  };
   const onPress = (value: any) => {
     if (value === "C") {
       handleClear();
+    }
+    else if (value === "=") {
+      handleEqual();
     } else {
       setInput(input + value)
     }
   }
   return (
     <View style={styles.container}>
+      {answer ? <Text style={styles.displayText}>ans : {answer} </Text> : null}
       {/* Display Result  */}
       <View style={styles.display}>
-        <Text style={styles.displayText}>{input}</Text>
+        {/* <Text style={styles.displayText}>{answer}</Text> */}
+        <Text style={styles.displayText}>{input || 0}</Text>
       </View>
 
 
