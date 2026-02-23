@@ -30,14 +30,17 @@ export default function Index() {
   };
 
 
-  const onPress = (value: any) => {
+  const onPress = (value: string) => {
+    if (input === "Calculation Error") {
+      setInput("");
+    }
     if (value === "C") {
       handleClear();
     }
     else if (value === "=") {
       handleEqual();
     } else {
-      setInput(input + value)
+      setInput(prev => prev + value);
     }
   }
   return (
@@ -45,7 +48,7 @@ export default function Index() {
       <Text style={styles.heading}>Calculator App</Text>
 
       <View>
-        {answer !== undefined && <Text style={styles.displayText}>ans : {answer} </Text> : null}
+        {answer !== undefined && (<Text style={styles.displayText}>ans : {answer} </Text>)}
         {/* Display Result  */}
         <View style={styles.display}>
           {/* <Text style={styles.displayText}>{answer}</Text> */}
